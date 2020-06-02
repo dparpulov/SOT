@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'webshopTwo.service'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+}
+
+war{
+    archiveFileName = 'webshopTryTwo.war'
+}
+
+dependencies {
+    compile group: 'org.glassfish.jersey.bundles', name: 'jaxrs-ri', version: '2.28'
+    compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: '2.28'
+}
+
+task createModelJar(type: Jar, dependsOn: compileJava) {
+    archiveFileName = "serviceModel.jar"
+    from sourceSets.main.output
+    include "tryTwo/service/model/*"
+    println "created serviceModel.jar from tryTwo/service/model/*.class"
+}
+
+task copyModelJarToClient(type: Copy, dependsOn:[createModelJar]) {
+    from "${buildDir}/libs/serviceModel.jar"
+    into "../webshopClient/lib/"
+    println "copied "+ "${buildDir}/libs/serviceModel.jar" + " into " + "../client - gradle/lib/"
+}

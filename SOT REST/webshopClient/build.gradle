@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'webshopTwo.client'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+    flatDir{
+        dirs 'lib'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'Main'
+    }
+    archiveFileName = 'client.jar'
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+application { mainClassName = 'Main' }
+
+dependencies {
+    compile group: 'org.glassfish.jersey.bundles', name: 'jaxrs-ri', version: '2.28'
+    compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: '2.28'
+
+    compile files(fileTree(dir:'lib', includes: ['*.jar']))
+}

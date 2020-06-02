@@ -1,0 +1,3 @@
+rootProject.name = 'webshopTry2'
+include 'webshopClient'
+
